@@ -1,9 +1,13 @@
 window._find = function (selector) {
-   
+    return this.querySelector(selector);
 }
 
-Element.prototype._each = function (callback) {
+window._findAll = function (selector) {
+    return this.querySelectorAll(selector);
+}
 
+NodeList.prototype._each = function (callback) {
+    for (var i = 0, len = this.length; i < len; i++) callback.call(this[i]);
 };
 
 Element.prototype._on = function (event, callback) {
@@ -11,8 +15,18 @@ Element.prototype._on = function (event, callback) {
     return this;
 };
 
+NodeList.prototype._on = function (event, callback) {
+    this._each(function () {
+        this._on(event, callback);
+    })
+};
+
 Element.prototype._find = function (selector) {
     return this.querySelector(selector);
+};
+
+Element.prototype._findAll = function (selector) {
+    return this.querySelectorAll(selector);
 };
 
 Element.prototype._attr = function (attrName, attrValue) {
